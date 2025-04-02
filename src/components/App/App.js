@@ -3,7 +3,7 @@ import Header from "../Header/Header";
 import Search from "../Search/Search";
 import Library from "../Library/Library";
 import styles from "./App.module.css";
-import songsData from "../../data/songs.json"; // Import the JSON data
+import songsData from "../../data/songs.json";
 import {
   MusicCollectionContext,
   MusicCollectionData,
@@ -20,8 +20,8 @@ function App() {
       ...item,
       id: crypto.randomUUID(),
     }));
-    setData(processedData); //set local data
-  }, []); // Remove musicCollection from dependency array
+    setData(processedData);
+  }, []);
 
   useEffect(() => {
     // Add initial songs to the musicCollection Context. Only add to context on initial load.
@@ -31,7 +31,7 @@ function App() {
         addToMusicCollection(song);
       });
     }
-  }, [addToMusicCollection, data, musicCollection.length]);
+  }, [addToMusicCollection, data, musicCollection]);
 
   return (
     <MusicCollectionData>
