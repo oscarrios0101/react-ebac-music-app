@@ -1,25 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Header from "../Header/Header";
-import SearchResults from "../SearchResults/SearchResults";
+import Search from "../Search/Search";
 import Library from "../Library/Library";
 import styles from "./App.module.css";
 import songsData from "../../data/songs.json"; // Import the JSON data
+import {
+  MusicCollectionContext,
+  MusicCollectionData,
+} from "../../Context/MusicCollection";
 
 function App() {
-  const [searchResults, setSearchResults] = useState(() => {
-    // Generate IDs for each song from the imported data
-    return songsData.map((song) => ({
-      ...song,
-      id: crypto.randomUUID(), // Generate a unique ID
+  const { addToMusicCollection, musicCollection, removeFromMusicCollection } =
+    useContext(MusicCollectionContext);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Process the data in the useEffect hook
+    const processedData = songsData.map((item) => ({
+      ...item,
+      id: crypto.randomUUID(),
     }));
-  });
+    setData(processedData); //set local data
+  }, []); // Remove musicCollection from dependency array
+
+  useEffect(() => {
+    // Add initial songs to the musicCollection Context. Only add to context on initial load.
+    const initialLoad = data.length > 0 && musicCollection.length === 0;
+    if (initialLoad) {
+      data.forEach((song) => {
+        addToMusicCollection(song);
+      });
+    }
+  }, [addToMusicCollection, data, musicCollection.length]);
 
   return (
-    <div className={styles.app}>
-      <Header />
-      <SearchResults searchResults={searchResults} />
-      <Library />
-    </div>
+    <MusicCollectionData>
+      <div className={styles.app}>
+        <Header />
+        <Search data={data} setData={setData} />
+        <Library data={data} setData={setData} />
+      </div>
+    </MusicCollectionData>
   );
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./SearchResults.module.css";
+import Song from "../Song/Song";
 
 function SearchResults({ searchResults }) {
   return (
@@ -9,8 +10,7 @@ function SearchResults({ searchResults }) {
         {searchResults.map((song) => (
           <li key={song.id} className={styles.searchResultsItem}>
             <div className={styles.songInfo}>
-              <span className={styles.songTitle}>{song.title}</span>
-              <span className={styles.songArtist}>{song.artist}</span>
+              <Song song={song} />
             </div>
           </li>
         ))}
